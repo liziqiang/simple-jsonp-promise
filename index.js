@@ -9,25 +9,25 @@ let count = 0;
  *
  * Options:
  * - prefix {String} callback prefix (defaults to `__jp`)
- * - jsonp {String} qs jsonpeter (defaults to `callback`)
+ * - callback {String} (defaults to `callback`)
  * - timeout {Number} how long after the request until a timeout error
  *   is emitted (defaults to `15000`)
  */
 let jsonp = function( url, options ) {
-    options     = options || {};
-    let prefix  = options.prefix || '__jp';
-    let jsonp   = options.jsonp || 'callback';
-    let params  = options.params || {};
-    let timeout = options.timeout ? options.timeout : 15000;
-    let target  = document.getElementsByTagName( 'script' )[ 0 ] || document.head;
+    options      = options || {};
+    let prefix   = options.prefix || '__jp';
+    let callback = options.callback || 'callback';
+    let params   = options.data || {};
+    let timeout  = options.timeout ? options.timeout : 15000;
+    let target   = document.getElementsByTagName( 'script' )[ 0 ] || document.head;
     let script;
     let timer;
     let cleanup;
     let promise;
-    let noop    = function() {};
+    let noop     = function() {};
     // Generate a unique id for the request.
-    let id      = prefix + (count++);
-    cleanup     = function() {
+    let id       = prefix + (count++);
+    cleanup      = function() {
         // Remove the script tag.
         if ( script && script.parentNode ) {
             script.parentNode.removeChild( script );
@@ -35,18 +35,18 @@ let jsonp = function( url, options ) {
         window[ id ] = noop;
         if ( timer ) { clearTimeout( timer ); }
     };
-    promise     = new Promise( ( resolve, reject ) => {
+    promise      = new Promise( ( resolve, reject ) => {
         if ( timeout ) {
             timer = setTimeout( function() {
                 cleanup();
                 reject( new Error( 'Timeout' ) );
             }, timeout );
         }
-        window[ id ]    = function( data ) {
+        window[ id ]       = function( data ) {
             cleanup();
             resolve( data );
         };
-        params[ jsonp ] = id;
+        params[ callback ] = id;
         for ( let key in params ) {
             url += (~url.indexOf( '?' ) ? '&' : '?') + key + '=' + encodeURIComponent( params[ key ] );
         }
