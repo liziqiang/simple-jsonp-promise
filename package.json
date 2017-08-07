@@ -1,0 +1,23 @@
+{
+  "name": "simple-jsonp-promise",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/liziqiang/simple-jsonp-promise.git"
+  },
+  "keywords": [
+    "jsonp",
+    "promise"
+  ],
+  "author": "Ziqiang Li <ziqiang.lee@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/liziqiang/simple-jsonp-promise/issues"
+  },
+  "homepage": "https://github.com/liziqiang/simple-jsonp-promise#readme"
+}
