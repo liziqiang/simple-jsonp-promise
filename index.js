@@ -4,6 +4,7 @@
 
 // Callback index.
 let count = 0;
+
 /**
  * JSONP handler
  *
@@ -13,7 +14,7 @@ let count = 0;
  * - timeout {Number} how long after the request until a timeout error
  *   is emitted (defaults to `15000`)
  */
-let jsonp = function( url, options ) {
+function jsonp( url, options ) {
     options      = options || {};
     let prefix   = options.prefix || '__jp';
     let callback = options.callback || 'callback';
@@ -22,22 +23,34 @@ let jsonp = function( url, options ) {
     let target   = document.getElementsByTagName( 'script' )[ 0 ] || document.head;
     let script;
     let timer;
-    let cleanup;
     let promise;
-    let noop     = function() {};
     // Generate a unique id for the request.
     let id       = prefix + (count++);
-    cleanup      = function() {
+
+    function noop() {}
+
+    function cleanup() {
         // Remove the script tag.
         if ( script && script.parentNode ) {
             script.parentNode.removeChild( script );
         }
         window[ id ] = noop;
         if ( timer ) { clearTimeout( timer ); }
-    };
-    promise      = new Promise( ( resolve, reject ) => {
+    }
+
+    function serialize( params ) {
+        let param = '';
+        for ( let key in params ) {
+            if ( params.hasOwnProperty( key ) ) {
+                param += `&${key}=${encodeURIComponent( params[ key ] )}`;
+            }
+        }
+        return param;
+    }
+
+    promise = new Promise( ( resolve, reject ) => {
         if ( timeout ) {
-            timer = setTimeout( function() {
+            timer = setTimeout( () => {
                 cleanup();
                 reject( new Error( 'Timeout' ) );
             }, timeout );
@@ -47,19 +60,18 @@ let jsonp = function( url, options ) {
             resolve( data );
         };
         params[ callback ] = id;
-        for ( let key in params ) {
-            url += (~url.indexOf( '?' ) ? '&' : '?') + key + '=' + encodeURIComponent( params[ key ] );
-        }
-        url            = url.replace( '?&', '?' );
+        url += serialize( params );
+        url                = url.replace( '?&', '?' );
         // Create script.
-        script         = document.createElement( 'script' );
-        script.src     = url;
-        script.onerror = function() {
+        script             = document.createElement( 'script' );
+        script.src         = url;
+        script.onerror     = function() {
             cleanup();
             reject( new Error( 'Network Error' ) );
         };
         target.parentNode.insertBefore( script, target );
     } );
     return promise;
-};
+}
+
 export default jsonp;
