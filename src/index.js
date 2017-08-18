@@ -39,7 +39,7 @@ function jsonp( url, options ) {
     }
 
     function serialize( params ) {
-        let param = '';
+        let param = '?';
         for ( let key in params ) {
             if ( params.hasOwnProperty( key ) ) {
                 param += `&${key}=${encodeURIComponent( params[ key ] )}`;
