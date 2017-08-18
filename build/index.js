@@ -46,7 +46,7 @@ function jsonp(url, options) {
     }
 
     function serialize(params) {
-        var param = '';
+        var param = '?';
         for (var key in params) {
             if (params.hasOwnProperty(key)) {
                 param += '&' + key + '=' + encodeURIComponent(params[key]);
