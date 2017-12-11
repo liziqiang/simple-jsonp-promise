@@ -46,13 +46,21 @@ function jsonp(url, options) {
     }
 
     function serialize(params) {
-        var param = '?';
+        var param = '';
         for (var key in params) {
             if (params.hasOwnProperty(key)) {
                 param += '&' + key + '=' + encodeURIComponent(params[key]);
             }
         }
         return param;
+    }
+
+    function handleUrl(url, params) {
+        if (!~url.indexOf('?')) {
+            url += '?';
+        }
+        url += serialize(params);
+        url = url.replace('?&', '?');
     }
 
     promise = new Promise(function (resolve, reject) {
@@ -67,8 +75,7 @@ function jsonp(url, options) {
             resolve(data);
         };
         params[callback] = id;
-        url += serialize(params);
-        url = url.replace('?&', '?');
+        url = handleUrl(url, params);
         // Create script.
         script = document.createElement('script');
         script.src = url;
