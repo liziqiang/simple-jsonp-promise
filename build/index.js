@@ -61,6 +61,7 @@ function jsonp(url, options) {
         }
         url += serialize(params);
         url = url.replace('?&', '?');
+        return url;
     }
 
     promise = new Promise(function (resolve, reject) {

@@ -54,6 +54,7 @@ function jsonp(url, options) {
         if (!~url.indexOf('?')) { url += '?'; }
         url += serialize(params);
         url = url.replace('?&', '?');
+        return url;
     }
 
     promise = new Promise((resolve, reject) => {
