@@ -76,7 +76,9 @@ function jsonp(url, options) {
             cleanup();
             resolve(data);
         };
-        params[callback] = id;
+        if (!callbackName) {
+            params[callback] = id;
+        }
         url = handleUrl(url, params);
         // Create script.
         script = document.createElement('script');

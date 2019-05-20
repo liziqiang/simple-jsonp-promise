@@ -26,7 +26,7 @@ function jsonp(url, options) {
     let timer;
     let promise;
     // Generate a unique id for the request.
-    let id = callbackName || (prefix + (count++));
+    let id = callbackName || prefix + count++;
 
     function noop() {}
 
@@ -69,7 +69,9 @@ function jsonp(url, options) {
             cleanup();
             resolve(data);
         };
-        params[callback] = id;
+        if (!callbackName) {
+            params[callback] = id;
+        }
         url = handleUrl(url, params);
         // Create script.
         script = document.createElement('script');
