@@ -23,6 +23,7 @@ function jsonp(url, options) {
     options = options || {};
     var prefix = options.prefix || '__jp';
     var callback = options.callback || 'callback';
+    var callbackName = options.callbackName;
     var params = options.data || {};
     var timeout = options.timeout ? options.timeout : 15000;
     var target = document.getElementsByTagName('script')[0] || document.head;
@@ -30,7 +31,7 @@ function jsonp(url, options) {
     var timer = void 0;
     var promise = void 0;
     // Generate a unique id for the request.
-    var id = prefix + count++;
+    var id = callbackName || prefix + count++;
 
     function noop() {}
 
