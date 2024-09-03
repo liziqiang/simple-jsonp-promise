@@ -11,7 +11,7 @@ yarn add simple-jsonp-promise
 ``` bash
 import jsonp from 'simple-jsonp-promise'
 let options = {
-        params:{
+        data: {
             a : 1,
             b : 2
         },
